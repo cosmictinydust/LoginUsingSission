@@ -1,25 +1,27 @@
 ﻿@using Microsoft.AspNetCore.Http;
+@inject Microsoft.Extensions.Caching.Distributed.IDistributedCache _check
 
-<ul class="navbar-nav">
-    @if (!string.IsNullOrWhiteSpace(Context.Session.GetString("UserName")))
-    {
-        <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="" asp-controller="Main" asp-action="Dashboard" title="Manage">会员 @Context.Session.GetString("UserName")!</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="" asp-controller="Main" asp-action="Logout">登出</a>
-        </li>
-    }
-    else
-    {
-        <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="" asp-controller="Main" asp-action="RegisterNewUser">注册用户</a>
-        </li>
+    <ul class="navbar-nav">
+        @if (!string.IsNullOrWhiteSpace(Context.Session.GetString("UserName")))
+        @*@if (!string.IsNullOrWhiteSpace(_check.GetAsync("UserName").ToString()))*@
+        {
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-area="" asp-controller="Main" asp-action="Dashboard" title="Manage">会员 @Context.Session.GetString("UserName")!</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-area="" asp-controller="Main" asp-action="Logout">登出</a>
+            </li>
+        }
+        else
+        {
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-area="" asp-controller="Main" asp-action="RegisterNewUser">注册用户</a>
+            </li>
 
-        <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="" asp-controller="Main" asp-action="Login">登陆</a>
-        </li>
-    }
-</ul>
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-area="" asp-controller="Main" asp-action="Login">登陆</a>
+            </li>
+        }
+    </ul>
 
 

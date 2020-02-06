@@ -39,13 +39,24 @@ namespace LoginUsingSission
 
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
-            services.AddControllersWithViews().AddRazorRuntimeCompilation();
-            //.SetCompatibilityVersion(Microsoft.AspNetCore.Mvc.CompatibilityVersion)
+            services.AddControllersWithViews()
+                //.AddRazorRuntimeCompilation();
+                //.SetCompatibilityVersion(Microsoft.AspNetCore.Mvc.CompatibilityVersion)
+                ;
 
-            services.AddDistributedMemoryCache();
-            services.AddSession();
+            //services.AddDistributedMemoryCache();
+            services.AddDistributedSqlServerCache(options =>
+            {
+                options.ConnectionString = Configuration.GetConnectionString("CacheConnect");
+                options.SchemaName = "dbo";
+                options.TableName = "AspNetCoreCache";
+            });
+            services.AddSession(options=> {
+                options.IdleTimeout = TimeSpan.FromDays(30 * 6);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
 
-            services.AddRazorPages();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -62,7 +73,7 @@ namespace LoginUsingSission
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
             app.UseStaticFiles();
 
             app.UseRouting();
